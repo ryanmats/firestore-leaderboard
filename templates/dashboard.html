@@ -1,0 +1,42 @@
+<h1>Firestore Leaderboard Dashboard</h1>
+
+<br>
+
+<html>
+  <body>
+    <form action="add_score" method="POST" enctype="multipart/form-data">
+      Player: <input type="text" name="player"><br>
+      Score: <input type="text" name="score"><br>
+      <input type="submit" name="submit" value="Submit">
+    </form>
+
+    <form action="retrieve_rank" method="POST" enctype="multipart/form-data">
+      Player: <input type="text" name="player"><br>
+      <input type="submit" name="submit" value="Retrieve Rank">
+    </form>
+
+    {% if player %}
+      <p>Player: {{player}}</p>
+      <p>Player Rank: {{player_rank}}</p>
+    {% endif %}
+    
+    <!-- Fetch the Firebase and Cloud Firestore Javascript libraries -->
+    <script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-firestore.js"></script>
+    <script>
+      // Firebase Configuration - REPLACE WITH YOUR OWN VALUES
+      var config = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        databaseURL: "YOUR_DATABASE_URL",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID"
+      };
+
+      // Initialize Firebase and Cloud Firestore
+      firebase.initializeApp(config);
+      var db = firebase.firestore();
+    </script>
+  </body>
+</html> 
