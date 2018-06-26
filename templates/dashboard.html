@@ -4,12 +4,15 @@
 
 <html>
   <body>
+    <h2>Add Player Score</h2>
     <form action="add_score" method="POST" enctype="multipart/form-data">
       Player: <input type="text" name="player"><br>
       Score: <input type="text" name="score"><br>
       <input type="submit" name="submit" value="Submit">
     </form>
+    <br>
 
+    <h2>Retrieve Player Rank</h2>
     <form action="retrieve_rank" method="POST" enctype="multipart/form-data">
       Player: <input type="text" name="player"><br>
       <input type="submit" name="submit" value="Retrieve Rank">
@@ -19,6 +22,12 @@
       <p>Player: {{player}}</p>
       <p>Player Rank: {{player_rank}}</p>
     {% endif %}
+
+    <br>
+
+    <div id="leaderboard">
+      <h2>Current Leaderboard (Top 20 Players)</h2>
+    </div>
     
     <!-- Fetch the Firebase and Cloud Firestore Javascript libraries -->
     <script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
@@ -37,6 +46,27 @@
       // Initialize Firebase and Cloud Firestore
       firebase.initializeApp(config);
       var db = firebase.firestore();
+
+      // Fetch current top 20 leaderboard and display it on the dashboard
+      var leaderboardRef = db.collection("leaderboard").doc("leaderboard");
+      leaderboardRef.get().then(function(doc) {
+        if (doc.exists) {
+          var leaders = doc.data().top20;
+          var numLeaders = leaders.length;
+          for (var i = 0; i < numLeaders; i++) {
+            var leader = leaders[i];
+            var leaderName = leader.name;
+            var leaderScore = leader.maxScore;
+            var rank = i + 1;
+            var leaderHTMLString = '<p><b>#' + rank + ' ' + leaderName + ' ' + leaderScore + '</b></p>';
+            document.getElementById("leaderboard").innerHTML += leaderHTMLString;
+          }
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document:", error);
+      });
     </script>
   </body>
 </html> 
